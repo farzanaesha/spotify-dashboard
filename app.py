@@ -14,8 +14,31 @@ import numpy as np
 # 1. LOAD DATASET FROM URL
 # ─────────────────────────────────────────────
 URL = "https://raw.githubusercontent.com/amankharwal/Website-data/master/spotify.csv"
-
-df = pd.read_csv(URL)
+try:
+    df = pd.read_csv(URL)
+except Exception as e:
+    print(f"Error loading data: {e}")
+    # fallback to mock data
+    import numpy as np
+    np.random.seed(42)
+    n = 500
+    genres = ["Pop","Hip-Hop","Rock","Electronic","R&B","Latin","Jazz","Classical"]
+    df = pd.DataFrame({
+        "track_name": [f"Track {i}" for i in range(n)],
+        "artist": [f"Artist_{i%50}" for i in range(n)],
+        "genre": np.random.choice(genres, n),
+        "year": np.random.randint(2015, 2024, n),
+        "popularity": np.random.randint(0, 101, n),
+        "danceability": np.random.beta(5,3,n).round(3),
+        "energy": np.random.beta(4,3,n).round(3),
+        "valence": np.random.beta(3,3,n).round(3),
+        "tempo": np.random.normal(120,25,n).clip(60,200).round(1),
+        "loudness": np.random.normal(-8,4,n).clip(-30,0).round(2),
+        "speechiness": np.random.beta(2,8,n).round(3),
+        "acousticness": np.random.beta(2,5,n).round(3),
+        "instrumentalness": np.random.beta(1,10,n).round(3),
+        "duration_ms": np.random.randint(120000, 360000, n),
+    })
 
 # ── Normalize column names ────────────────────
 df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
