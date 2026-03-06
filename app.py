@@ -13,7 +13,7 @@ import numpy as np
 # ─────────────────────────────────────────────
 # 1. LOAD DATASET FROM URL
 # ─────────────────────────────────────────────
-URL = "https://raw.githubusercontent.com/amankharwal/Website-data/master/spotify.csv"
+URL = ""https://raw.githubusercontent.com/amankharwal/Website-data/master/spotify_dataset.csv""
 try:
     df = pd.read_csv(URL)
 except Exception as e:
@@ -54,7 +54,7 @@ for col in df.columns:
 df.rename(columns=rename_map, inplace=True)
 
 # ── Clean ─────────────────────────────────────
-df.drop_duplicates(subset=["track_name", "artist"], inplace=True, errors="ignore")
+df.drop_duplicates(subset=["track_name", "artist"], inplace=True)
 df.dropna(subset=["popularity", "danceability", "energy"], inplace=True)
 
 if "duration_ms" in df.columns:
