@@ -81,16 +81,18 @@ print(f"Ready: {len(df):,} tracks | {df['genre'].nunique()} genres")
 # ─────────────────────────────────────────────
 # 2. THEME
 # ─────────────────────────────────────────────
-BG        = "#0D0D0D"
-CARD      = "#161616"
-BORDER    = "#282828"
-GREEN     = "#1DB954"
-GREEN2    = "#1ED760"
-TEXT      = "#FFFFFF"
-SUBTEXT   = "#B3B3B3"
-PLOTBG    = "#111111"
-GRIDCOLOR = "#1F1F1F"
-COLORS    = px.colors.qualitative.Vivid
+BG        = "#F0F4FA"
+CARD      = "#FFFFFF"
+BORDER    = "#D0DCF0"
+ACCENT    = "#1A56DB"
+ACCENT2   = "#3B82F6"
+GREEN     = "#1A56DB"
+GREEN2    = "#3B82F6"
+TEXT      = "#0F172A"
+SUBTEXT   = "#475569"
+PLOTBG    = "#FFFFFF"
+GRIDCOLOR = "#E2EAF4"
+COLORS    = px.colors.qualitative.Safe
 
 def hex_to_rgba(hex_color, alpha=0.15):
     h = hex_color.lstrip("#")
@@ -150,7 +152,8 @@ app.layout = html.Div(
                    style={"margin": "0", "color": SUBTEXT, "fontSize": "12px"}),
         ])
     ], style={"display": "flex", "alignItems": "center", "gap": "14px",
-               "padding": "24px 36px 18px", "borderBottom": f"1px solid {BORDER}"}),
+               "padding": "24px 36px 18px", "borderBottom": f"1px solid {BORDER}",
+               "boxShadow": "0 2px 8px rgba(26,86,219,0.08)"}),
 
     # Filters
     html.Div([
@@ -276,7 +279,7 @@ def update(genre, year_range, min_pop):
                     color_discrete_sequence=[GREEN])
     fig2.update_traces(line_width=2.5, marker_size=7, marker_color=GREEN2)
     fig2.add_hline(y=yr["popularity"].mean(), line_dash="dot",
-                    line_color="rgba(29,185,84,0.35)",
+                    line_color="rgba(26,86,219,0.3)",
                     annotation_text=f"avg {yr['popularity'].mean():.1f}",
                     annotation_font_color=GREEN)
     apply_theme(fig2, "AVG POPULARITY BY YEAR")
@@ -285,7 +288,7 @@ def update(genre, year_range, min_pop):
     # Radar
     rf = [f for f in ["danceability","energy","valence","acousticness","speechiness"]
           if f in fdf.columns]
-    radar_colors = ["#1DB954","#FF6B6B","#4ECDC4","#FFE66D","#A29BFE"]
+    radar_colors = ["#1A56DB","#2563EB","#3B82F6","#60A5FA","#93C5FD"]
     genres_radar = fdf["genre"].value_counts().head(5).index if genre == "All" else [genre]
     fig3 = go.Figure()
     for i, g in enumerate(genres_radar):
@@ -325,7 +328,7 @@ def update(genre, year_range, min_pop):
     corr = fdf[num_cols].corr().round(2)
     fig5 = go.Figure(go.Heatmap(
         z=corr.values, x=corr.columns, y=corr.index,
-        colorscale=[[0,"#0D3B2A"],[0.5,PLOTBG],[1,GREEN]],
+        colorscale=[[0,"#EFF6FF"],[0.5,"#93C5FD"],[1,"#1A56DB"]],
         text=corr.values, texttemplate="%{text}",
         textfont={"size": 9}, zmin=-1, zmax=1,
         colorbar=dict(tickfont=dict(color=SUBTEXT)),
@@ -367,8 +370,8 @@ def update(genre, year_range, min_pop):
                      "padding": "10px 14px", "textAlign": "left"},
         style_data_conditional=[
             {"if": {"row_index": 0},
-             "backgroundColor": "rgba(29,185,84,0.08)", "color": GREEN2},
-            {"if": {"row_index": "odd"}, "backgroundColor": "#131313"},
+             "backgroundColor": "rgba(26,86,219,0.06)", "color": ACCENT},
+            {"if": {"row_index": "odd"}, "backgroundColor": "#F8FAFF"},
         ],
     )
 
